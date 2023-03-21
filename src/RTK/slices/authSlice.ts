@@ -42,7 +42,7 @@ const initialState: AuthState = {
       });
 
 
-    export const register = (data:SignUpData,onError: ()=> void ) => async (dispatch: any) => {
+    export const register = (data:SignUpData,onError: ()=> string ) => async (dispatch: any) => {
         try {
           dispatch(SET_LOADING(true));
           const res = await firebase.auth().createUserWithEmailAndPassword(data.email, data.password as string);

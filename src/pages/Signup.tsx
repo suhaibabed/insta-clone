@@ -1,7 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../RTK/store';
+import { register } from './../RTK/slices/authSlice';
+
+
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.authSlice.????);
+  const error = useSelector((state: RootState) => state.authSlice.???);
+
+
+
+const handleSubmit= (event:any)=>{
+  event.preventDefault();
+  dispatch(register(data,onError));
+}
+
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
     <div className="flex w-3/5">
@@ -14,7 +30,7 @@ const SignUp = () => {
         </h1>
 
 
-        <form onSubmit={()=>{}} method="POST">
+        <form onSubmit={handleSubmit} method="POST">
           <input
             aria-label="Enter your username"
             type="text"
