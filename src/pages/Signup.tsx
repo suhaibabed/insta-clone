@@ -7,22 +7,24 @@ import { SignUpData } from '../RTK';
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state: RootState) => state.authSlice);
+  const myState = useSelector((state: RootState) => state.authSlice);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget));
     dispatch(signUpUser(data as any) as any).then(
-      (res: any) => dispatch, /// dispatching add user
+      (res: any) => {
+        console.log({ res });
+      }, /// dispatching add user
     );
   };
-  console.log(error, loading);
+  console.log({ myState });
 
   return (
     <>
       <div>
-        {loading && <p>Loading...</p>}
-        {error && <p>{error}</p>}
+        {/* {loading && <p>Loading...</p>}
+        {error && <p>{error}</p>} */}
       </div>
       <div className="container flex mx-auto max-w-screen-md items-center h-screen">
         <div className="flex w-3/5">

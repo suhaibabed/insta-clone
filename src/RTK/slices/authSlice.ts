@@ -24,43 +24,41 @@ const authSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
-    SET_USER: (state, action: PayloadAction<User>) => {
-      Object.assign(state, action.payload);
-    },
-    SET_LOADING(state, action: PayloadAction<boolean>) {
-      // state.loading = action.payload;
-    },
+    // SET_USER: (state, action: PayloadAction<User>) => {
+    //   Object.assign(state, action.payload);
+    // },
+    // SET_LOADING(state, action: PayloadAction<boolean>) {
+    //   // state.loading = action.payload;
+    // },
     SET_ERROR(state, action: PayloadAction<string>) {
       // state.error = action.payload;
     },
     NEED_VERIFICATION(state, action: PayloadAction<boolean>) {
       // state.needVerification = action.payload;
     },
-
-    extraReducers: (builder: any) => {
-      builder.addCase(signUpUser.pending, (state: AuthState) => {
-        Object.assign(state, {
-          loading: true,
-          error: '',
-        });
+  },
+  extraReducers: (builder: any) => {
+    builder.addCase(signUpUser.pending, (state: AuthState) => {
+      Object.assign(state, {
+        loading: true,
       });
-      builder.addCase(
-        signUpUser.fulfilled,
-        (state: AuthState, action: PayloadAction<User | string>) => {
-          if (typeof action.payload === 'string') {
-            return {
-              ...state,
-              error: action.payload,
-            };
-          }
+    });
+    builder.addCase(
+      signUpUser.fulfilled,
+      (state: AuthState, action: PayloadAction<User | string>) => {
+        if (typeof action.payload === 'string') {
           return {
             ...state,
-            user: action.payload,
-            authenticated: true,
+            error: action.payload,
           };
-        },
-      );
-    },
+        }
+        return {
+          ...state,
+          user: action.payload,
+          authenticated: true,
+        };
+      },
+    );
   },
 });
 
@@ -126,6 +124,7 @@ export const signUpUser = createAsyncThunk(
         await res.user.sendEmailVerification();
         return userData;
       }
+      return rejectWithValue('No user returned');
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -145,5 +144,5 @@ export const signUpUser = createAsyncThunk(
 //     }
 //   };
 
-export const { SET_USER, SET_LOADING, SET_ERROR } = authSlice.actions;
+export const { SET_ERROR } = authSlice.actions;
 export default authSlice.reducer;
