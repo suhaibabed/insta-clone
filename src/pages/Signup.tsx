@@ -12,7 +12,9 @@ const SignUp = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget));
-    dispatch(signUpUser(data as any) as any).then(console.log);
+    dispatch(signUpUser(data as any) as any).then(
+      (res: any) => dispatch, /// dispatching add user
+    );
   };
   console.log(error, loading);
 
