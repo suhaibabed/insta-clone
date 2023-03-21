@@ -50,15 +50,24 @@ const authSlice = createSlice({
           return {
             ...state,
             error: action.payload,
+            loading: false,
           };
         }
         return {
           ...state,
           user: action.payload,
           authenticated: true,
+          loading: false,
         };
       },
     );
+    builder.addCase(signUpUser.rejected, (state: AuthState) => {
+      return {
+        ...state,
+        error: 'Error signing up',
+        loading: false,
+      };
+    });
   },
 });
 

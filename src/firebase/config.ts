@@ -11,5 +11,4 @@ firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 });
 
-console.log('firebase', firebase);
 export default firebase;
