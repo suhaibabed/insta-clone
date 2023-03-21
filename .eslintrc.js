@@ -61,5 +61,6 @@ module.exports = {
     'no-case-declarations': 0,
     'no-underscore-dangle': 0,
     'no-restricted-exports': 0,
+    'consistent-return': 0,
   },
 };

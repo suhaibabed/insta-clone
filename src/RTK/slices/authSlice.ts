@@ -8,7 +8,7 @@ import {
   SignUpData,
   User,
 } from '../index';
-import { RootState, store } from '../store';
+// import { RootState, store } from '../store';
 import firebase from '../../firebase/config';
 
 const initialState: AuthState = {
@@ -25,27 +25,92 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     SET_USER: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
+      Object.assign(state, action.payload);
     },
     SET_LOADING(state, action: PayloadAction<boolean>) {
-      state.loading = action.payload;
+      // state.loading = action.payload;
     },
     SET_ERROR(state, action: PayloadAction<string>) {
-      state.error = action.payload;
+      // state.error = action.payload;
     },
     NEED_VERIFICATION(state, action: PayloadAction<boolean>) {
-      state.needVerification = action.payload;
+      // state.needVerification = action.payload;
+    },
+
+    extraReducers: (builder: any) => {
+      builder.addCase(signUpUser.pending, (state: AuthState) => {
+        Object.assign(state, {
+          loading: true,
+          error: '',
+        });
+      });
+      builder.addCase(
+        signUpUser.fulfilled,
+        (state: AuthState, action: PayloadAction<User | string>) => {
+          if (typeof action.payload === 'string') {
+            return {
+              ...state,
+              error: action.payload,
+            };
+          }
+          return {
+            ...state,
+            user: action.payload,
+            authenticated: true,
+          };
+        },
+      );
     },
   },
 });
 
-export const register =
-  (data: SignUpData, onError: () => string) => async (dispatch: any) => {
+// export const register =
+//   (data: SignUpData, onError: () => string) => async (dispatch: any) => {
+//     try {
+//       dispatch(SET_LOADING(true));
+//       const res = await firebase
+//         .auth()
+//         .createUserWithEmailAndPassword(data.email, data.password as string);
+//       if (res.user) {
+//         const userData: User = {
+//           email: data.email,
+//           userName: data.userName,
+//           id: res.user.uid,
+//           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+//         };
+//         await firebase
+//           .firestore()
+//           .collection('/users')
+//           .doc(res.user.uid)
+//           .set(userData);
+//         await res.user.sendEmailVerification();
+//         dispatch({
+//           type: NEED_VERIFICATION,
+//         });
+//         dispatch({
+//           type: SET_USER,
+//           payload: userData,
+//         });
+//       }
+//     } catch (err) {
+//       console.log(err);
+//       onError();
+//       dispatch({
+//         type: SET_ERROR,
+//         payload: err.message,
+//       });
+//     }
+//   };
+
+export const signUpUser = createAsyncThunk(
+  'auth/signUpUser',
+  async (data: SignUpData, { rejectWithValue }) => {
     try {
-      dispatch(SET_LOADING(true));
       const res = await firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password as string);
+
+      console.log('signUpUser', data, res);
       if (res.user) {
         const userData: User = {
           email: data.email,
@@ -59,23 +124,13 @@ export const register =
           .doc(res.user.uid)
           .set(userData);
         await res.user.sendEmailVerification();
-        dispatch({
-          type: NEED_VERIFICATION,
-        });
-        dispatch({
-          type: SET_USER,
-          payload: userData,
-        });
+        return userData;
       }
     } catch (err) {
-      console.log(err);
-      onError();
-      dispatch({
-        type: SET_ERROR,
-        payload: err.message,
-      });
+      return rejectWithValue(err.message);
     }
-  };
+  },
+);
 
 //   export const login = (email: string, password: string) => async (dispatch: any) => {
 //     try {

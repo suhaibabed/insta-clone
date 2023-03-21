@@ -19,7 +19,12 @@ const Login = () => {
             className="mt-2 w-6/12 mb-4"
           />
         </h1>
-        <form onSubmit={() => {}} method="POST">
+        <form
+          onSubmit={() => {
+            return false;
+          }}
+          method="POST"
+        >
           <input
             aria-label="Enter your email address"
             type="text"
@@ -47,7 +52,7 @@ const Login = () => {
         </form>
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 mt-4 rounded border border-gray-primary">
           <p className="text-sm">
-            Don't have an account?{` `}
+            Do not have an account?
             <Link to="/signup" className="font-bold text-blue-700">
               Sign up
             </Link>
