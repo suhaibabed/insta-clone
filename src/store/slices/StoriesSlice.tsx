@@ -24,14 +24,13 @@ export const fetchStory = createAsyncThunk(
 );
 
 interface StoryState {
-  loading: boolean;
-  error: string | null;
+  map(arg0: (product: any) => JSX.Element): import("react").ReactNode;
+  
   data: Stories[] | null;
 }
 
 const initialState = {
-  loading: false,
-  error: null,
+ 
   data: null,
 } as StoryState;
 
@@ -40,24 +39,15 @@ const StoriesSlice = createSlice({
   name: 'StoriesSlice',
   reducers: {},
   extraReducers: builder => {
-    builder
-      .addCase(fetchStory.pending, (state, action) => {
-        const newState = { ...state };
-        newState.loading = true;
-      })
-      .addCase(
+    builder.addCase(
         fetchStory.fulfilled,
         (state, action: PayloadAction<Stories[]>) => {
           const newState = { ...state };
-          newState.loading = false;
+          
           newState.data = action.payload;
         },
       )
-      .addCase(fetchStory.rejected, (state, action: PayloadAction<any>) => {
-        const newState = { ...state };
-        newState.loading = false;
-        newState.error = action.payload;
-      });
+     
   },
 });
 
