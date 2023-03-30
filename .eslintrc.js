@@ -11,8 +11,9 @@ module.exports = {
     "prettier",
     "plugin:prettier/recommended",
   ],
-  plugins: ["@typescript-eslint", "react", "prettier", "jsx-a11y"],
   parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint", "react", "prettier", "jsx-a11y"],
+
   parserOptions: {
     createDefaultProgram: true,
     ecmaFeatures: {
